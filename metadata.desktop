@@ -1,0 +1,14 @@
+[SddmGreeterTheme]
+Name=Celeste
+Description=Celeste style theme by Mingy
+Author=Mingy
+Copyright=(c) 2022, Mingy
+License=CC-BY-SA
+Type=sddm-theme
+Version=0.1
+Website=https://github.com/Mingy123/celeste-sddm
+MainScript=Main.qml
+ConfigFile=theme.conf
+Email=mingy123.coc@gmail.com
+Theme-Id=celeste-sddm
+Theme-API=2.0
