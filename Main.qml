@@ -27,6 +27,8 @@ Item {
             scale.xScale = screen.width / 1920
         else
             scale.xScale = screen.height / 1080
+        width = screen.width
+        height = screen.height
     }
 
     transform: Scale {
