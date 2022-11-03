@@ -4,7 +4,7 @@ import "components"
 
 Item {
     id: root
-    width: 1920
+    width: 1920; height: 1080
     property Item selitem: login_button
     property Item selcard
     property int card: 0
@@ -12,7 +12,6 @@ Item {
         background.play()
         wind.play(); bgm.play()
         bufferSFX()
-        height = 1080
         login_button.focus = true
 
         // set the lastUser
@@ -22,7 +21,21 @@ Item {
                 break
             }
         }
+
+        var screen = screenModel.geometry(screenModel.primary)
+        if (screen.width / screen.height > 9/16)
+            scale.xScale = screen.width / 1920
+        else
+            scale.xScale = screen.height / 1080
     }
+
+    transform: Scale {
+        id: scale
+        yScale: xScale
+    }
+
+
+
     function changeFocus(item) {
         move.play()
         selitem.deselectAnimation()
@@ -71,6 +84,7 @@ Item {
         login.play()
         invalid.play()
         select.play()
+        success.play()
     } SFX {
         id: move
         source: "assets/sfx/move.wav"
@@ -92,6 +106,9 @@ Item {
     } SFX {
         id: login
         source: "assets/sfx/login.wav"
+    } SFX {
+        id: success
+        source: "assets/sfx/success.wav"
     }
 
     Column {
@@ -299,7 +316,7 @@ Item {
     property bool animating: false
     function show_login() {
         if (animating) return
-        login.play()
+        login.stop(); login.play()
         animating = true
         icon_shake.start()
     }
@@ -321,6 +338,12 @@ Item {
             selcard.right_in()
             selcard.focus = true
             animating = false
+        }
+    } Connections {
+        target: sddm
+        onLoginSucceeded: success.play()
+        onLoginFailed: {
+            selcard.deselect()
         }
     }
 
@@ -361,8 +384,7 @@ Item {
         model: userModel
         delegate: Card {
             username: model.name
-            icon: "main.png"
-            sddmIcon: model.icon
+            icon: model.icon
             anchors.verticalCenter: parent.verticalCenter
             // i need to hide this for now
             x: -width
@@ -371,10 +393,14 @@ Item {
             onExit: exit_login()
             onHide: selcard.x = -selcard.width
 
-            onLogin: {
-                sddm.login(username, password, sessionModel.lastIndex)
-            }
+            onLogin: sddm.login(username, password, sessionModel.lastIndex)
         }
     }
 
+    // to hide the mouse
+    MouseArea {
+        anchors.fill: parent
+        enabled: false
+        cursorShape: Qt.BlankCursor
+    }
 }

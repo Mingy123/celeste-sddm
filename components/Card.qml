@@ -5,7 +5,6 @@ Image {
     id: root
     source: "../assets/card.png"
     property url icon
-    property var sddmIcon
     property string username: "username"
     property string password: ""
     property real leftX: -width
@@ -26,7 +25,7 @@ Image {
         height: overlay.height * 0.75
         Image {
             anchors.fill: parent
-            source: root.sddmIcon // TODO
+            source: root.icon
             fillMode: Image.PreserveAspectCrop
         } anchors {
             horizontalCenter: overlay.horizontalCenter
