@@ -389,12 +389,14 @@ Item {
     }
 
     function card_next() {
+        if (userModel.count < 2) return
         if (++card >= userModel.count) card = 0
         selcard.left_out()
         selcard = users.itemAt(card)
         selcard.right_in()
         selcard.focus = true
     } function card_prev() {
+        if (userModel.count < 2) return
         if (--card < 0) card = userModel.count-1
         selcard.right_out()
         selcard = users.itemAt(card)
