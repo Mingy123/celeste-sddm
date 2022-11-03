@@ -303,18 +303,19 @@ Item {
         animating = true
         icon_shake.start()
     }
+
+    // deprecated in newer versions
     Connections {
         target: icon_shake
-        function onStarted() {
+        onStarted: {
             icon_bob.start()
             vbox_out.start()
-        }
-        function onFinished() {
+        } onFinished: {
             icon_out.start()
         }
     } Connections {
         target: icon_out
-        function onFinished() {
+        onFinished: {
             whooshIn.play()
             selcard = users.itemAt(card)
             selcard.right_in()
