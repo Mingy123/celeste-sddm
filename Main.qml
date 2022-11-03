@@ -8,6 +8,13 @@ Item {
     property Item selitem: login_button
     property Item selcard
     property int card: 0
+    // ratio = height/width
+    property real ratio: 1080/1920
+    property real eWidth: {
+        if (height/width > ratio) return width
+        return height/ratio
+    } property real eHeight: ratio*eWidth
+    property real eScale: eWidth/1920
     Component.onCompleted: {
         background.play()
         wind.play(); bgm.play()
@@ -21,20 +28,7 @@ Item {
                 break
             }
         }
-
-        var screen = screenModel.geometry(screenModel.primary)
-        if (screen.width / screen.height > 9/16)
-            scale.xScale = screen.width / 1920
-        else
-            scale.xScale = screen.height / 1080
     }
-
-    transform: Scale {
-        id: scale
-        yScale: xScale
-    }
-
-
 
     function changeFocus(item) {
         move.play()
@@ -111,206 +105,235 @@ Item {
         source: "assets/sfx/success.wav"
     }
 
-    Column {
-        x: root.width * 0.1
-        y: root.height * 0.15
-        id: login_button
-        // putting them together for animation
-        spacing: root.height * 0.01
-        property color selectColor: "#ffff8b"
-        Component.onCompleted: {
-            y_bob.value = y
-            icon_out.from = x
-            icon_out.to = -x -width
-            icon_in.to = x
-            icon_in.from = -x -width
-        }
-        
-        function selectAnimation() { y_bob.start() }
-        function deselectAnimation() { y_bob.stop() }
-        ShakeAnimation on y {
-            id: y_bob
-            length: 200
-            shake: root.height * 0.01
-        }
-
-        SequentialAnimation on x {
-            running: false
-            id: icon_in
-            property real from; property real to
-            PauseAnimation { duration: 100 }
-            NumberAnimation {
-                duration: 200
-                from: icon_in.from
-                to: icon_in.to
-                easing.type: Easing.OutQuad
+    Item {
+        id: fakeroot
+        anchors.horizontalCenter: root.horizontalCenter
+        anchors.verticalCenter: root.verticalCenter
+        width: eWidth; height: eHeight
+        Column {
+            // this is just here to throw an error
+            Rectangle { anchors.fill: parent }
+            scale: eScale
+            x: eWidth * 0.1
+            y: eHeight * 0.15
+            id: login_button
+            // putting them together for animation
+            spacing: eHeight * 0.01
+            property color selectColor: "#ffff8b"
+            Component.onCompleted: {
+                icon_out.from = x
+                icon_out.to = -x -width
+                icon_in.to = x
+                icon_in.from = -x -width
             }
-        } SequentialAnimation on x {
-            running: false
-            id: icon_out
-            property real from; property real to
-            NumberAnimation {
-                duration: 200
-                from: icon_out.from
-                to: icon_out.to
-                easing.type: Easing.InQuad
-            } PauseAnimation { duration: 100 }
-        }
+            
+            function selectAnimation() { y_bob.value = y; y_bob.start() }
+            function deselectAnimation() { y_bob.stop() }
+            ShakeAnimation on y {
+                id: y_bob
+                length: 200
+                shake: eHeight * 0.01
+            }
 
-        Image {
-            id: login_icon
-            source: "assets/mountain.png"
-            // create the fucking impossible animation
-            SequentialAnimation on rotation {
-                id: icon_shake
+            SequentialAnimation on x {
                 running: false
-                property int length: 400
-                RotationAnimation {
-                    from: 10; to: -7
-                    duration: icon_shake.length * 0.4
-                    easing.type: Easing.InOutQuad
-                } RotationAnimation {
-                    from: -7; to: 4.5
-                    duration: icon_shake.length * 0.25
-                    easing.type: Easing.InOutQuad }
-                RotationAnimation {
-                    from: 4.5; to: -2
-                    duration: icon_shake.length * 0.25
-                    easing.type: Easing.InOutQuad
-                } RotationAnimation {
-                    from: -2; to: 0
-                    duration: icon_shake.length * 0.1
-                    easing.type: Easing.InOutQuad
+                id: icon_in
+                property real from; property real to
+                PauseAnimation { duration: 100 }
+                NumberAnimation {
+                    duration: 200
+                    from: icon_in.from
+                    to: icon_in.to
+                    easing.type: Easing.OutQuad
+                }
+            } SequentialAnimation on x {
+                running: false
+                id: icon_out
+                property real from; property real to
+                NumberAnimation {
+                    duration: 200
+                    from: icon_out.from
+                    to: icon_out.to
+                    easing.type: Easing.InQuad
                 } PauseAnimation { duration: 100 }
             }
 
-            SequentialAnimation on y {
-                id: icon_bob
+            Image {
+                id: login_icon
+                source: "assets/mountain.png"
+                // create the fucking impossible animation
+                SequentialAnimation on rotation {
+                    id: icon_shake
+                    running: false
+                    property int length: 400
+                    RotationAnimation {
+                        from: 10; to: -7
+                        duration: icon_shake.length * 0.4
+                        easing.type: Easing.InOutQuad
+                    } RotationAnimation {
+                        from: -7; to: 4.5
+                        duration: icon_shake.length * 0.25
+                        easing.type: Easing.InOutQuad }
+                    RotationAnimation {
+                        from: 4.5; to: -2
+                        duration: icon_shake.length * 0.25
+                        easing.type: Easing.InOutQuad
+                    } RotationAnimation {
+                        from: -2; to: 0
+                        duration: icon_shake.length * 0.1
+                        easing.type: Easing.InOutQuad
+                    } PauseAnimation { duration: 100 }
+                }
+
+                SequentialAnimation on y {
+                    id: icon_bob
+                    running: false
+                    property int length: 400
+                    property real value: 0
+                    property real amp: -40
+                    NumberAnimation {
+                        from: icon_bob.value + icon_bob.amp; to: icon_bob.value
+                        duration: icon_bob.length * 0.5
+                        easing.type: Easing.InQuad
+                    } NumberAnimation {
+                        from: icon_bob.value; to: icon_bob.amp * 0.4 + icon_bob.value
+                        duration: icon_bob.length * 0.30
+                        easing.type: Easing.OutQuad
+                    } NumberAnimation {
+                        from: icon_bob.value + icon_bob.amp * 0.4; to: icon_bob.value
+                        duration: icon_bob.length * 0.20
+                    }
+                }
+            }
+
+
+            Text {
+                text: "LOGIN"
+                color: parent.focus ? parent.selectColor : "white"
+                font { pointSize: 48; family: "Renogare" }
+                style: Text.Outline
+                styleColor: "black"
+                anchors.horizontalCenter: login_icon.horizontalCenter
+            }
+            
+            Keys.onPressed: (event) => {
+                if (event.isAutoRepeat) return;
+                switch (event.key) {
+                    case Qt.Key_Return: case Qt.Key_Enter: case Qt.Key_C:
+                    case Qt.Key_Right: case Qt.Key_D: case Qt.Key_L:
+                        show_login()
+                        break
+                    case Qt.Key_Up: case Qt.Key_W: case Qt.Key_K:
+                        root.changeFocus(sleep_button)
+                        break
+                    case Qt.Key_Down: case Qt.Key_S: case Qt.Key_J:
+                        root.changeFocus(shutdown_button)
+                        break
+                }
+            }
+        }
+
+        Column {
+            // this is just here to throw an error
+            Rectangle { anchors.fill: parent }
+            scale: eScale
+            id: intro_vbox
+            x: eWidth * 0.095
+            y: eHeight * 0.46
+            spacing: eHeight * 0.025
+
+            Component.onCompleted: {
+                vbox_out.from = x
+                vbox_out.to = -x -width
+                vbox_in.to = x
+                vbox_in.from = -x -width
+            }
+
+            SequentialAnimation on x {
                 running: false
-                property int length: 400
-                property real value: 0
-                property real amp: -40
+                id: vbox_in
+                property real from; property real to
+                PauseAnimation { duration: 100 }
                 NumberAnimation {
-                    from: icon_bob.value + icon_bob.amp; to: icon_bob.value
-                    duration: icon_bob.length * 0.5
-                    easing.type: Easing.InQuad
-                } NumberAnimation {
-                    from: icon_bob.value; to: icon_bob.amp * 0.4 + icon_bob.value
-                    duration: icon_bob.length * 0.30
+                    duration: 200
+                    from: vbox_in.from
+                    to: vbox_in.to
                     easing.type: Easing.OutQuad
-                } NumberAnimation {
-                    from: icon_bob.value + icon_bob.amp * 0.4; to: icon_bob.value
-                    duration: icon_bob.length * 0.20
+                }
+            }
+            NumberAnimation on x { running: false; id: vbox_out; duration: 200; easing.type: Easing.InQuad }
+
+            IconLabel {
+                id: shutdown_button
+                text: "Shutdown"
+                onUp: changeFocus(login_button)
+                onDown: changeFocus(reboot_button)
+                image: "assets/shutdown.png"
+
+                onEnter: {
+                    if (!sddm.canPowerOff) {
+                        invalid.stop(); invalid.play()
+                    } else {
+                        select.play()
+                        sddm.powerOff()
+                    }
+                }
+            }
+
+            IconLabel {
+                id: reboot_button
+                text: "Reboot"
+                onUp: changeFocus(shutdown_button)
+                onDown: changeFocus(sleep_button)
+                image: "assets/reboot.png"
+
+                onEnter: {
+                    if (!sddm.canReboot) {
+                        invalid.stop(); invalid.play()
+                    } else {
+                        select.play()
+                        sddm.reboot()
+                    }
+                }
+            }
+
+            IconLabel {
+                id: sleep_button
+                text: "Sleep"
+                onUp: changeFocus(reboot_button)
+                onDown: changeFocus(login_button)
+                image: "assets/sleep.png"
+
+                onEnter: {
+                    if (!sddm.canSuspend) {
+                        invalid.stop(); invalid.play()
+                    } else {
+                        select.play()
+                        sddm.suspend()
+                    }
                 }
             }
         }
 
+        Repeater {
+            id: users
+            model: userModel
+            delegate: Card {
+                scale: eScale
+                username: model.name
+                icon: model.icon
+                anchors.verticalCenter: parent.verticalCenter
+                // i need to hide this for now
+                x: -width
+                onPrev: card_prev()
+                onNext: card_next()
+                onExit: exit_login()
+                onHide: selcard.x = -selcard.width
 
-        Text {
-            text: "LOGIN"
-            color: parent.focus ? parent.selectColor : "white"
-            font { pointSize: 48; family: "Renogare" }
-            style: Text.Outline
-            styleColor: "black"
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
-        
-        Keys.onPressed: (event) => {
-            if (event.isAutoRepeat) return;
-            switch (event.key) {
-                case Qt.Key_Return: case Qt.Key_Enter: case Qt.Key_C:
-                case Qt.Key_Right: case Qt.Key_D: case Qt.Key_L:
-                    show_login()
-                    break
-                case Qt.Key_Up: case Qt.Key_W: case Qt.Key_K:
-                    root.changeFocus(sleep_button)
-                    break
-                case Qt.Key_Down: case Qt.Key_S: case Qt.Key_J:
-                    root.changeFocus(shutdown_button)
-                    break
+                onLogin: sddm.login(username, password, sessionModel.lastIndex)
             }
         }
     }
-
-    Column {
-        id: intro_vbox
-        x: root.width * 0.095
-        y: root.height * 0.46
-        spacing: root.height * 0.025
-
-        Component.onCompleted: {
-            vbox_out.from = x
-            vbox_out.to = -x -width
-            vbox_in.to = x
-            vbox_in.from = -x -width
-        }
-
-        SequentialAnimation on x {
-            running: false
-            id: vbox_in
-            property real from; property real to
-            PauseAnimation { duration: 100 }
-            NumberAnimation {
-                duration: 200
-                from: vbox_in.from
-                to: vbox_in.to
-                easing.type: Easing.OutQuad
-            }
-        }
-        NumberAnimation on x { running: false; id: vbox_out; duration: 200; easing.type: Easing.InQuad }
-
-        IconLabel {
-            id: shutdown_button
-            text: "Shutdown"
-            onUp: changeFocus(login_button)
-            onDown: changeFocus(reboot_button)
-            image: "assets/shutdown.png"
-
-            onEnter: {
-                if (!sddm.canPowerOff) {
-                    invalid.stop(); invalid.play()
-                } else {
-                    select.play()
-                    sddm.powerOff()
-                }
-            }
-        }
-
-        IconLabel {
-            id: reboot_button
-            text: "Reboot"
-            onUp: changeFocus(shutdown_button)
-            onDown: changeFocus(sleep_button)
-            image: "assets/reboot.png"
-
-            onEnter: {
-                if (!sddm.canReboot) {
-                    invalid.stop(); invalid.play()
-                } else {
-                    select.play()
-                    sddm.reboot()
-                }
-            }
-        }
-
-        IconLabel {
-            id: sleep_button
-            text: "Sleep"
-            onUp: changeFocus(reboot_button)
-            onDown: changeFocus(login_button)
-            image: "assets/sleep.png"
-
-            onEnter: {
-                if (!sddm.canSuspend) {
-                    invalid.stop(); invalid.play()
-                } else {
-                    select.play()
-                    sddm.suspend()
-                }
-            }
-        }
-    }
-
 
 
     property bool animating: false
@@ -377,24 +400,6 @@ Item {
         selcard = users.itemAt(card)
         selcard.left_in()
         selcard.focus = true
-    }
-
-    Repeater {
-        id: users
-        model: userModel
-        delegate: Card {
-            username: model.name
-            icon: model.icon
-            anchors.verticalCenter: parent.verticalCenter
-            // i need to hide this for now
-            x: -width
-            onPrev: card_prev()
-            onNext: card_next()
-            onExit: exit_login()
-            onHide: selcard.x = -selcard.width
-
-            onLogin: sddm.login(username, password, sessionModel.lastIndex)
-        }
     }
 
     // to hide the mouse
