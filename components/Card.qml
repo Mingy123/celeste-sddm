@@ -11,7 +11,7 @@ Image {
     property real rightX: parent.width
     property real middleX: (parent.width-width)/2
     property int aDuration: 150
-    property bool lock
+    property bool lock: false
 
     signal next(); signal prev()
     signal login(); signal exit()

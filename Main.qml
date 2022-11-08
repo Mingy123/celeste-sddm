@@ -365,6 +365,7 @@ Item {
         target: sddm
         onLoginSucceeded: success.play()
         onLoginFailed: {
+            selcard.lock = false
             selcard.deselect()
         }
     }
