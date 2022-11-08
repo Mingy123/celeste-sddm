@@ -2,8 +2,8 @@
 
 SDDM theme trying to replicate Celeste
 
-![preview1](preview1.png)
-![preview2](preview2.png)
+![preview1](preview1.jpg)
+![preview2](preview2.jpg)
 
 There is a lite branch with a less intensive version, e.g. less animations and sfx
 
