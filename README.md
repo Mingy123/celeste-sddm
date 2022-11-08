@@ -2,6 +2,14 @@
 
 SDDM theme trying to replicate Celeste
 
+There is a lite branch with a less intensive version, e.g. less animations and sfx
+
+### Usage
+
+You can navigate with WASD/HJKL/UpDownLeftRight buttons; Enter/C and Escape/X for "forward" and "backward" respectively.
+
+On selecting a card (with username on it), you can input password. Press Enter to login.
+
 ### Dependencies (credits: 3ximus)
 
 It is necessary to have the Phonon GStreamer backend for qt5, GStreamer ffmpeg Plugin and GStreamer Plugins Good
@@ -39,12 +47,6 @@ Copy into `/usr/share/sddm/themes/`:
 Edit /etc/sddm.conf:
 `Current=celeste-sddm`
 
-*Note that super user priviledges are needed.*
+*Note that super user privileges are needed.*
 
 The theme can be tested by running `sddm-greeter --test-mode --theme <path-to-this-repository>`
-
-### Other notes
-
-There is a lite branch with a less intensive version, e.g. less animations and sfx
-
-Theme is licensed under MIT.
