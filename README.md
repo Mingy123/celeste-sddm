@@ -2,7 +2,7 @@
 
 SDDM theme trying to replicate Celeste
 
-![preview](preview.gif)
+![preview](preview.mp4)
 
 There is a lite branch with a less intensive version, e.g. less animations and sfx
 
