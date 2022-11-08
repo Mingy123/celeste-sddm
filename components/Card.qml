@@ -61,10 +61,7 @@ Image {
             width: parent.width * 0.02
             height: main.height
             color: "#5c3e52"
-            anchors {
-                verticalCenter: parent.verticalCenter
-                horizontalCenter: parent.horizontalCenter
-            }
+            anchors.centerIn: parent
             Timer {
                 repeat: true
                 running: true
@@ -82,10 +79,8 @@ Image {
             font {
                 pointSize: 34
                 family: "Renogare"
-            } anchors {
-                verticalCenter: parent.verticalCenter
-                horizontalCenter: parent.horizontalCenter
-            } width: parent.width
+            } anchors.centerIn: parent
+            width: parent.width
             fontSizeMode: Text.HorizontalFit
             text: root.username
 

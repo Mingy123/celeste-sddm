@@ -107,8 +107,7 @@ Item {
 
     Item {
         id: fakeroot
-        anchors.horizontalCenter: root.horizontalCenter
-        anchors.verticalCenter: root.verticalCenter
+        anchors.centerIn: root
         width: eWidth; height: eHeight
         Column {
             // this is just here to throw an error
