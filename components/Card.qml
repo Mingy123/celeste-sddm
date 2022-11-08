@@ -18,7 +18,6 @@ Image {
     signal hide() // when user scrolls too quickly
 
     Component.onCompleted: {
-        run_animation.play()
         scroll.play()
     }
 
