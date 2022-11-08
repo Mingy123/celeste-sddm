@@ -18,6 +18,7 @@ Image {
     signal hide() // when user scrolls too quickly
 
     Component.onCompleted: {
+        run_animation.play()
         scroll.play()
     }
 
@@ -74,14 +75,6 @@ Image {
             }
         }
 
-        Video {
-            id: run_animation
-            anchors.centerIn: cursor
-            loops: MediaPlayer.Infinite
-            source: "assets/run.gif"
-            visible: lock
-        }
-
         Text {
             id: main
             color: "#5c3e52"
@@ -95,6 +88,14 @@ Image {
 
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
+        }
+
+        AnimatedImage {
+            id: run_animation
+            scale: 0.5
+            anchors.centerIn: cursor
+            source: "../assets/run.gif"
+            visible: lock
         }
     }
 
