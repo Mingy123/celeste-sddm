@@ -11,6 +11,7 @@ Image {
     property real rightX: parent.width
     property real middleX: (parent.width-width)/2
     property int aDuration: 150
+    property bool lock
 
     signal next(); signal prev()
     signal login(); signal exit()
@@ -73,6 +74,14 @@ Image {
             }
         }
 
+        Video {
+            id: run_animation
+            anchors.centerIn: cursor
+            loops: MediaPlayer.Infinite
+            source: "assets/run.gif"
+            visible: lock
+        }
+
         Text {
             id: main
             color: "#5c3e52"
@@ -114,6 +123,8 @@ Image {
 
     Keys.onPressed: (kev) => {
         kev.accepted = true
+        if (lock) return
+        if (selected && kev.key == Qt.Key_Backspace) deleteChar()
         if (kev.isAutoRepeat) return
 
         // printable character
@@ -127,10 +138,8 @@ Image {
                 case Qt.Key_Escape:
                     deselect()
                     break
-                case Qt.Key_Backspace:
-                    deleteChar()
-                    break
                 case Qt.Key_Return: case Qt.Key_Enter:
+                    lock = true
                     login()
             }
         } else {
