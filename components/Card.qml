@@ -135,10 +135,10 @@ Image {
 
         if (selected) {
             switch (kev.key) {
-                case Qt.Key_Escape:
+                case Qt.Key_Escape: case Qt.Key_Left:
                     deselect()
                     break
-                case Qt.Key_Return: case Qt.Key_Enter:
+                case Qt.Key_Return: case Qt.Key_Enter: case Qt.Key_Right:
                     lock = true
                     login()
             }
