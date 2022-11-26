@@ -128,7 +128,7 @@ Image {
         if (kev.isAutoRepeat) return
 
         // printable character
-        if (selected && kev.key > 0x20 && kev.key < 0x7c) {
+        if (selected && kev.key >= 0x20 && kev.key < 0x7c) {
             password += kev.text
             cursor.visible = false
         }
