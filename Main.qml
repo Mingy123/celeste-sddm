@@ -132,15 +132,17 @@ Item {
             icon_in.from = -x -width
         }
         
-        function selectAnimation() { y_bob.value = y; y_bob.start() }
-        function deselectAnimation() { y_bob.stop() }
-        ShakeAnimation on y {
+        function selectAnimation() {
+            y_bob.value = anchors.topMargin
+            y_bob.start()
+        } function deselectAnimation() { y_bob.stop() }
+        ShakeAnimation on anchors.topMargin {
             id: y_bob
             length: 200
             shake: eHeight * 0.01
         }
 
-        SequentialAnimation on x {
+        SequentialAnimation on anchors.leftMargin {
             running: false
             id: icon_in
             property real from; property real to
@@ -151,7 +153,7 @@ Item {
                 to: icon_in.to
                 easing.type: Easing.OutQuad
             }
-        } SequentialAnimation on x {
+        } SequentialAnimation on anchors.leftMargin {
             running: false
             id: icon_out
             property real from; property real to
@@ -261,7 +263,7 @@ Item {
             vbox_in.from = -x -width
         }
 
-        SequentialAnimation on x {
+        SequentialAnimation on anchors.leftMargin {
             running: false
             id: vbox_in
             property real from; property real to
@@ -273,7 +275,7 @@ Item {
                 easing.type: Easing.OutQuad
             }
         }
-        NumberAnimation on x { running: false; id: vbox_out; duration: 200; easing.type: Easing.InQuad }
+        NumberAnimation on anchors.leftMargin { running: false; id: vbox_out; duration: 200; easing.type: Easing.InQuad }
 
         IconLabel {
             id: shutdown_button
