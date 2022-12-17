@@ -109,7 +109,6 @@ Item {
     }
 
     Column {
-        //scale: eScale
         transform: Scale {
             xScale: eScale
             yScale: xScale
@@ -125,12 +124,6 @@ Item {
         id: login_button
         spacing: eHeight * 0.01
         property color selectColor: "#ffff8b"
-        Component.onCompleted: {
-            icon_out.from = x
-            icon_out.to = -x -width
-            icon_in.to = x
-            icon_in.from = -x -width
-        }
         
         function selectAnimation() {
             y_bob.value = anchors.topMargin
@@ -145,22 +138,20 @@ Item {
         SequentialAnimation on anchors.leftMargin {
             running: false
             id: icon_in
-            property real from; property real to
             PauseAnimation { duration: 100 }
             NumberAnimation {
                 duration: 200
-                from: icon_in.from
-                to: icon_in.to
+                from: -width
+                to: eWidth * 0.1
                 easing.type: Easing.OutQuad
             }
         } SequentialAnimation on anchors.leftMargin {
             running: false
             id: icon_out
-            property real from; property real to
             NumberAnimation {
                 duration: 200
-                from: icon_out.from
-                to: icon_out.to
+                from: eWidth * 0.1
+                to: -width
                 easing.type: Easing.InQuad
             } PauseAnimation { duration: 100 }
         }
@@ -256,13 +247,6 @@ Item {
         id: intro_vbox
         spacing: eHeight * 0.025
 
-        Component.onCompleted: {
-            vbox_out.from = x
-            vbox_out.to = -x -width
-            vbox_in.to = x
-            vbox_in.from = -x -width
-        }
-
         SequentialAnimation on anchors.leftMargin {
             running: false
             id: vbox_in
@@ -270,12 +254,19 @@ Item {
             PauseAnimation { duration: 100 }
             NumberAnimation {
                 duration: 200
-                from: vbox_in.from
-                to: vbox_in.to
+                from: -width
+                to: eWidth * 0.095
                 easing.type: Easing.OutQuad
             }
         }
-        NumberAnimation on anchors.leftMargin { running: false; id: vbox_out; duration: 200; easing.type: Easing.InQuad }
+        NumberAnimation on anchors.leftMargin {
+            running: false;
+            id: vbox_out;
+            from: eWidth * 0.095
+            to: -width
+            duration: 200;
+            easing.type: Easing.InQuad
+        }
 
         IconLabel {
             id: shutdown_button
