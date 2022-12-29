@@ -112,8 +112,6 @@ Item {
         transform: Scale {
             xScale: eScale
             yScale: xScale
-            origin.x: -anchors.leftMargin
-            origin.y: -anchors.topMargin
         }
         anchors {
             top: background.top
@@ -235,8 +233,6 @@ Item {
         transform: Scale {
             xScale: eScale
             yScale: xScale
-            origin.x: -anchors.leftMargin
-            origin.y: -anchors.topMargin
         }
         anchors {
             top: background.top
