@@ -1,5 +1,5 @@
 import QtQuick 2.9
-import QtMultimedia 5.15
+import QtMultimedia
 import "components"
 
 Item {
@@ -49,28 +49,34 @@ Item {
                 "#9aff84" : "#ffff8b"
         }
     }
-
-    FontLoader {source: "assets/celeste.otf"}
-    Video {
-        id: background
-        loops: MediaPlayer.Infinite
+    VideoOutput {
+        id: background_video
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         height: eHeight
         width: eWidth
+    }
+    FontLoader {source: "assets/celeste.otf"}
+    MediaPlayer {
+        id: background
+        loops: MediaPlayer.Infinite
         source: "assets/background.mp4"
-    } Audio {
-        id: bgm
-        source: "assets/bgm.wav"
-        loops: Audio.Infinite
-    } Audio {
-        id: wind
-        source: "assets/wind.wav"
-        loops: Audio.Infinite
-    } Audio {
-        id: secret
-        source: "assets/wow_so_secret.wav"
-        loops: Audio.Infinite
+	videoOutput: background_video
+    }  MediaPlayer {
+      id: bgm
+      source: "assets/bgm.wav"
+      loops: MediaPlayer.Infinite
+      audioOutput: AudioOutput { }
+    } MediaPlayer {
+      id: wind
+      source: "assets/wind.wav"
+      loops: MediaPlayer.Infinite
+      audioOutput: AudioOutput { }
+    } MediaPlayer {
+      id: secret
+      source: "assets/wow_so_secret.wav"
+      loops: MediaPlayer.Infinite
+      audioOutput: AudioOutput { }
     }
 
     function bufferSFX() {
@@ -114,8 +120,8 @@ Item {
             yScale: xScale
         }
         anchors {
-            top: background.top
-            left: background.left
+            top: background_video.top
+            left: background_video.left
             leftMargin: eWidth * 0.1
             topMargin: eHeight * 0.15
         }
@@ -235,8 +241,8 @@ Item {
             yScale: xScale
         }
         anchors {
-            top: background.top
-            left: background.left
+            top: background_video.top
+            left: background_video.left
             leftMargin: eWidth * 0.095
             topMargin: eHeight * 0.46
         }
@@ -269,7 +275,7 @@ Item {
             text: "Shutdown"
             onUp: changeFocus(login_button)
             onDown: changeFocus(reboot_button)
-            image: "assets/shutdown.png"
+            image: "../assets/shutdown.png"
 
             onEnter: {
                 if (!sddm.canPowerOff) {
@@ -286,7 +292,7 @@ Item {
             text: "Reboot"
             onUp: changeFocus(shutdown_button)
             onDown: changeFocus(sleep_button)
-            image: "assets/reboot.png"
+            image: "../assets/reboot.png"
 
             onEnter: {
                 if (!sddm.canReboot) {
@@ -303,7 +309,7 @@ Item {
             text: "Sleep"
             onUp: changeFocus(reboot_button)
             onDown: changeFocus(login_button)
-            image: "assets/sleep.png"
+            image: "../assets/sleep.png"
 
             onEnter: {
                 if (!sddm.canSuspend) {
@@ -331,7 +337,9 @@ Item {
             onExit: exit_login()
             onHide: selcard.x = -selcard.width
 
-            onLogin: sddm.login(username, password, sessionModel.lastIndex)
+            function onLogin() {
+	    	     sddm.login(username, password, sessionModel.lastIndex)
+	    }
         }
     }
 
@@ -347,15 +355,16 @@ Item {
     // deprecated in newer versions
     Connections {
         target: icon_shake
-        onStarted: {
+        function onStarted() {
             icon_bob.start()
             vbox_out.start()
-        } onFinished: {
+        }
+	function onFinished() {
             icon_out.start()
         }
     } Connections {
         target: icon_out
-        onFinished: {
+        function onFinished() {
             whooshIn.play()
             selcard = users.itemAt(card)
             selcard.right_in()
@@ -364,11 +373,13 @@ Item {
         }
     } Connections {
         target: sddm
-        onLoginSucceeded: success.play()
-        onLoginFailed: {
+	function onLoginSucceeded() {
+		 success.play()
+	}
+	function onLoginFailed() {
             selcard.lock = false
             selcard.deselect()
-        }
+	}
     }
 
     function cards_animating() {

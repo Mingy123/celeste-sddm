@@ -1,13 +1,8 @@
-import QtMultimedia 5.15
+import QtMultimedia
 
 // wrapper class for sfx items
 // use play() to buffer it
-Audio {
+MediaPlayer {
     id: audio
-    muted: true
-    playbackRate: 10
-    onStopped: {
-        playbackRate = 1
-        muted = false
-    }
+    audioOutput: AudioOutput {}
 }

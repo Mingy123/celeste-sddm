@@ -1,9 +1,9 @@
 import QtQuick 2.9
-import QtMultimedia 5.15
+import QtMultimedia
 
 Image {
     id: root
-    source: "../assets/card.png"
+    source: "assets/card.png"
     property url icon
     property string username: "username"
     property string password: ""
